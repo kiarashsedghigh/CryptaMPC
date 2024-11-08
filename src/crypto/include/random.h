@@ -3,14 +3,12 @@
 #include <cstdint>
 #include <ostream>
 #include <vector>
-#include <string_view>
 #include <string>
 
 namespace cryptampc::crypto {
     class Random {
     public:
         friend std::ostream& operator<<(std::ostream& os, const Random& randObj);
-
 
         Random()= default;
         explicit Random(int len);
