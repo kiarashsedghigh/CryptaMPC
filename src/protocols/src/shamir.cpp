@@ -4,7 +4,7 @@
 // #include <vector>
 //
 // using namespace NTL;
-// using namespace std;
+// using namespace std;;;;;;
 //
 // // Function to generate shares from a secret using Shamir's Secret Sharing
 // void generate_shares(vector<pair<long, ZZ>>& shares, int n, int k, const ZZ& secret, const ZZ& prime) {
