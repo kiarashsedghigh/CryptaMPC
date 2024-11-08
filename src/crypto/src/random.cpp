@@ -19,18 +19,16 @@ std::string cryptampc::crypto::Random::as_string() const {
 std::string cryptampc::crypto::Random::as_hex_string() const {
     std::ostringstream oss;
 
-    for (uint8_t byte : bytes) {
+    for (uint8_t byte : bytes)
         oss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
-    }
 
     return oss.str();
 }
 
 namespace cryptampc::crypto {
     std::ostream& operator<<(std::ostream& os, const cryptampc::crypto::Random& obj){
-        for (auto byte: obj.get_bytes()) {
+        for (auto byte: obj.get_bytes())
             os << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
-        }
         return os;
     }
 }
