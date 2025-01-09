@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <string>
 #include "io/io.h"
-
-
 #include <iostream>
 
 namespace qst::io {

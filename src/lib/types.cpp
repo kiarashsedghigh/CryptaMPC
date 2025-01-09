@@ -1,6 +1,11 @@
 #include "types.h"
 
 namespace qst::types {
+    /**
+     * @brief asd
+     * SOME FUNCTION
+     * @param data
+     */
     Data::Data(const qst::types::__m128i &data)
     : m_size(16) {
         const auto* ptr = reinterpret_cast<const std::uint8_t*>(&data);

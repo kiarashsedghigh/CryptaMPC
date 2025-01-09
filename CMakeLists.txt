@@ -36,3 +36,23 @@ add_executable(sha2
         src/include/math/group.h
 )
 
+
+# Check if Doxygen is installed
+find_package(Doxygen REQUIRED)
+
+# Set the Doxyfile
+# Set the Doxygen paths
+set(DOXYGEN_INPUT_DIR ${CMAKE_SOURCE_DIR}/src) # Source directory
+set(DOXYGEN_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/docs) # Output directory in project root
+set(DOXYGEN_CONFIG_FILE ${CMAKE_BINARY_DIR}/Doxyfile) # Doxyfile in build directory
+
+# Configure a custom Doxyfile
+configure_file(${CMAKE_SOURCE_DIR}/Doxyfile ${DOXYGEN_CONFIG_FILE} @ONLY)
+
+# Add a custom target for Doxygen
+add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIG_FILE}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} # Ensure Doxygen runs in project root
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+)

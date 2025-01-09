@@ -4,7 +4,7 @@
 #include <openssl/evp.h>
 
 namespace qst::protocols {
-    class Ot {
+    class OT {
 
     };
 }
