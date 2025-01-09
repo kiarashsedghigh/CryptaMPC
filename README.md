@@ -1,1 +1,1 @@
-# CryptaMPC
+# QuantumSafeThreshold
