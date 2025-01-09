@@ -1,7 +1,9 @@
 #include <iostream>
+#include "qst.h"
 
 
 int main(){
-  std::cout << "Hello World!" << std::endl;
+  std::cout << "Testing QST API" << std::endl;
+
   return 0;
 }
