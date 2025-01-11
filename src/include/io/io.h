@@ -4,10 +4,8 @@
 #include <cstdint>
 #include "types.h"
 
-/**
- * @namespace qst::io
- * The namespace of io in qst
- */
+
+
 namespace qst::io {
     /**
      * @class IO
@@ -17,12 +15,14 @@ namespace qst::io {
         virtual ~IO() = default;
 
     private:
-        /**
-         * @brief function
-         * @param data
-         * @param size
-         */
+
         virtual void write(const types::Data &data, std::uint64_t size) = 0;
+
+        /**
+         * 
+         * @param buffer
+         * @return 
+         */
         virtual std::uint64_t read(const types::Data &buffer) = 0;
 
 

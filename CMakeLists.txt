@@ -26,6 +26,8 @@ add_executable(fileio
         src/lib/io/file_io.cpp
         src/lib/types.cpp
         src/include/crypto/hash.h
+        src/include/mpc/protocols/ot/npot.h
+        src/include/math/bigint.h
 )
 
 add_executable(sha2
@@ -36,6 +38,19 @@ add_executable(sha2
         src/include/math/group.h
 )
 
+
+add_executable(ot
+        src/include/mpc/protocols/ot/ot.h
+        src/lib/mpc/protocols/ot/ot.cpp
+        src/include/crypto/sha2.h
+        src/lib/crypto/sha2.cpp
+        src/include/math/group.h
+        src/include/math/bigint.h
+        src/include/types.h
+        src/lib/types.cpp
+        src/lib/io/net_io.cpp
+
+)
 
 # Check if Doxygen is installed
 find_package(Doxygen REQUIRED)

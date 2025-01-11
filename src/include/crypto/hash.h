@@ -1,7 +1,7 @@
 #ifndef HASH_H
 #define HASH_H
 
-namespace qst::hash {
+namespace qst::crypto::hash {
     class Hash {
     public:
         virtual ~Hash() = default;
