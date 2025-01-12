@@ -1,17 +1,21 @@
-# Minimum CMake version required
 cmake_minimum_required(VERSION 3.26)
 
-# Project name and language
 project(QuantumSafeThreshold LANGUAGES CXX)
 
-# Set the C++ standard to C++23
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_compile_options(-O3)
+
 include_directories(src/include)
 
 link_libraries(-lssl -lcrypto)
+
+
+####################################
+############ Build Targets
+####################################
 
 add_executable(netio
         src/include/io/net_io.h
@@ -19,7 +23,6 @@ add_executable(netio
         src/lib/io/net_io.cpp
         src/lib/types.cpp
 )
-
 
 
 add_executable(fileio
@@ -74,6 +77,11 @@ add_custom_target(docs
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
 )
+
+
+####################################
+############ Test Targets
+####################################
 
 add_executable(test_netio
         src/include/io/net_io.h

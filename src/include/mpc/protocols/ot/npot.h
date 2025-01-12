@@ -113,18 +113,17 @@ namespace qst::mpc::protocols {
             auto byte_buffer = std::make_unique<char[]>(2 * m_data_size);
             m_io->read(byte_buffer.get(), 2 * m_data_size);
 
-            types::Data masked_data[2]{};
-            for (int i = 0; i < m_data_size; i++) {
-                masked_data[0].m_bytes.push_back(byte_buffer[i]);
-                masked_data[1].m_bytes.push_back(byte_buffer[i + m_data_size]);
-            }
+            const types::Data masked_data[2] = {
+                types::Data{byte_buffer.get(), m_data_size},
+                types::Data{byte_buffer.get() + m_data_size, m_data_size}
+            };
 
             const int ind{choice ? 1 : 0};
             return masked_data[ind] ^ hash_point_to_data(gr);
         }
 
         /**
-         * @brief Send function for 1-N OT instance of Naor Pinkas OT
+         * @brief Send function for N 1-2 OT instance of Naor Pinkas OT
          * @param arr_data1 List of first element of the tuples
          * @param arr_data2 List of second element of the tuples
          * @param count Number of tuples
@@ -187,7 +186,7 @@ namespace qst::mpc::protocols {
         }
 
         /**
-         * @brief Receive function for 1-N OT instance of Naor Pinkas OT
+         * @brief Receive function for N 1-2 OT instance of Naor Pinkas OT
          * @param arr_data Pointer to the list of data to be written into
          * @param choices List of choice bits
          * @param count Number of tuples
@@ -222,17 +221,17 @@ namespace qst::mpc::protocols {
             m_io->flush();
 
             for (int64_t i = 0; i < count; ++i) {
-                types::Data masked_data[2]{};
+                // types::Data masked_data[2]{};
 
                 const int ind{choices[i] ? 1 : 0};
 
                 auto byte_buffer = std::make_unique<char[]>(2 * m_data_size);
                 m_io->read(byte_buffer.get(), 2 * m_data_size);
 
-                for (int i = 0; i < m_data_size; i++) {
-                    masked_data[0].m_bytes.push_back(byte_buffer[i]);
-                    masked_data[1].m_bytes.push_back(byte_buffer[i + 16]);
-                }
+                const types::Data masked_data[2] = {
+                    types::Data{byte_buffer.get(), m_data_size},
+                    types::Data{byte_buffer.get() + m_data_size, m_data_size}
+                };
 
                 arr_data[i] = masked_data[ind] ^ hash_point_to_data(gr[i]);
             }
