@@ -20,6 +20,13 @@ add_executable(netio
         src/lib/types.cpp
 )
 
+add_executable(test_netio
+        src/include/io/net_io.h
+        test/io/test_netio.cpp
+        src/lib/io/net_io.cpp
+        src/lib/types.cpp
+)
+
 add_executable(fileio
         src/include/io/file_io.h
         main.cpp
@@ -71,3 +78,4 @@ add_custom_target(docs
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
 )
+

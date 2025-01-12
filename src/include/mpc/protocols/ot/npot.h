@@ -49,8 +49,6 @@ namespace qst::mpc::protocols {
 
 
         void send_onetwo(const types::Data &data1, const types::Data &data2) {
-            std::cout << "J\n";
-
             math::numbers::BigInt d;
             G->get_rand_bn(d);
             math::algstruct::Point C = G->mul_gen(d);
@@ -59,21 +57,7 @@ namespace qst::mpc::protocols {
             // io->send_pt(&C);
             // -----------------------------------
             send_pt(io, &C);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            std::cout << "S: SEND POINT\n";
 
             io->flush();
             m_length = 1;
@@ -92,20 +76,19 @@ namespace qst::mpc::protocols {
             }
 
             for(int64_t i = 0; i < m_length; ++i) {
-                std::cout << "recv points\n";
+
 
                 // io->recv_pt(G, &pk0[i]);
                 // --------------------------------
                 recv_pt(io, G, &pk0[i]);
-                std::cout << "Done\n";
+                std::cout << "S: RECV POINT\n";
 
             }
             for(int64_t i = 0; i < m_length; ++i) {
-                std::cout << "sending points\n";
-
                 // io->send_pt(&gr[i]);
                 // ---------------------------------------------------
                 send_pt(io, &gr[i]);
+                std::cout << "S: SEND POINT\n";
 
 
 
@@ -118,12 +101,21 @@ namespace qst::mpc::protocols {
                 pk0[i] = pk0[i].mul(r[i]);
                 math::algstruct::Point inv = pk0[i].inv();
                 math::algstruct::Point pk1 = Cr[i].add(inv);
+
+                std::cout << qst::math::algstruct::hash_point_to_data(pk0[i]).get_size() << data2.get_size() << "here\n";
                 m[0] = qst::math::algstruct::hash_point_to_data(pk0[i]) ^ data1;
                 m[0] = qst::math::algstruct::hash_point_to_data(pk1) ^ data2;
 
                 // m[0] = Hash::KDF(pk0[i]) ^ data1[i];
                 // m[1] = Hash::KDF(pk1) ^ data2[i];
-                // io->send_data(m, 2*sizeof(block));
+                char buff[100];
+                // io->send_data_internal(m, 2*(sizeof(qst::types::Data)));
+
+                io->send_data_internal(buff, 100);
+                // send_pt(io, &gr[i]);
+
+                std::cout << "S: SEND DATA\n";
+
             }
 
             delete[] r;
@@ -135,6 +127,7 @@ namespace qst::mpc::protocols {
         }
 
         types::Data recv_onetwo(bool choice) {
+
             m_length = 1;
             auto * k = new math::numbers::BigInt[m_length];
             auto * gr = new math::algstruct::Point[m_length];
@@ -147,7 +140,7 @@ namespace qst::mpc::protocols {
             // io->recv_pt(G, &C);
             // --------------------------------------
             recv_pt(io, G, &C);
-
+            std::cout << "R: RECV POINT\n";
 
 
 
@@ -170,6 +163,7 @@ namespace qst::mpc::protocols {
                 // io->send_pt(&pk[0]);
                 // ------------------------
                 send_pt(io, &pk[0]);
+                std::cout << "R: SEND POINT\n";
                 //
                 // size_t len = pk[0].size();
                 // pk[0].group->resize_scratch(len);
@@ -195,6 +189,7 @@ namespace qst::mpc::protocols {
             for(int64_t i = 0; i < m_length; ++i) {
                 // io->recv_pt(G, &gr[i]);
                 recv_pt(io, G, &gr[i]);
+                std::cout << "R: RECV POINT\n";
 
 
 
@@ -212,14 +207,20 @@ namespace qst::mpc::protocols {
 
                 gr[i] = gr[i].mul(k[i]);
             }
-            io->flush();
-            for(int64_t i = 0; i < m_length; ++i) {
+            // io->flush();
+
+            for(int64_t i = 0; i < 1; ++i) {
                 int ind = choice ? 1 : 0;
-                io->recv_data_internal(m, 50); // todo
 
+                std::cout << ".................... Data:\n";
+                // io->recv_data_internal(m, 2*sizeof(qst::types::Data)); // todo
 
+                char buff[100];
+                io->recv_data_internal(buff, 100);
+                std::cout << "R: RECV data 50\n";
                 // data[i] = m[ind] ^ Hash::KDF(gr[i]);
                 // data
+                std::cout << "recv points - - - - - - - - - - \n";
                 return (m[ind] ^ math::algstruct::hash_point_to_data(gr[i]));
             }
             delete[] k;

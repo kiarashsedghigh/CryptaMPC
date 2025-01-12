@@ -2,33 +2,31 @@
 #define IO_H
 
 #include <cstdint>
-#include "types.h"
-
-
 
 namespace qst::io {
     /**
-     * @class IO
+     * @brief Parent class for various IO channels like Network or File.
      */
     class IO {
     public:
         virtual ~IO() = default;
 
     private:
-
-        virtual void write(const types::Data &data, std::uint64_t size) = 0;
+        /**
+         * @brief Writes bytes into the IO channel
+         * @param input Pointer to the input buffer from which we want to write
+         * @param len Number of bytes to be written from the buffer
+         */
+        virtual void write(const void *input, std::uint64_t len) = 0;
 
         /**
-         * 
-         * @param buffer
-         * @return 
+         * @brief Reads bytes from the IO channel
+         * @param buffer Pointer to the output buffer to which we want to write
+         * @param len Number of bytes to be read from the buffer
          */
-        virtual std::uint64_t read(const types::Data &buffer) = 0;
-
-
+        virtual void read(void *buffer, std::uint64_t len) = 0;
     };
 }
-
 
 
 #endif

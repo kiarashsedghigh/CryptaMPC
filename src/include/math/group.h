@@ -90,7 +90,7 @@ namespace qst::math::algstruct {
         unsigned char * tmp = in.group->scratch;
         in.to_bin(tmp, len);
         memcpy(tmp + len, &id, 8);
-        return types::Data {hash_for_block(tmp, len + 8)};
+        return {hash_for_block(tmp, len + 8)};
     }
 
     //todo not mine
