@@ -20,12 +20,7 @@ add_executable(netio
         src/lib/types.cpp
 )
 
-add_executable(test_netio
-        src/include/io/net_io.h
-        test/io/test_netio.cpp
-        src/lib/io/net_io.cpp
-        src/lib/types.cpp
-)
+
 
 add_executable(fileio
         src/include/io/file_io.h
@@ -35,6 +30,7 @@ add_executable(fileio
         src/include/crypto/hash.h
         src/include/mpc/protocols/ot/npot.h
         src/include/math/bigint.h
+        mainpage.cpp
 )
 
 add_executable(sha2
@@ -79,3 +75,22 @@ add_custom_target(docs
         VERBATIM
 )
 
+add_executable(test_netio
+        src/include/io/net_io.h
+        test/io/test_netio.cpp
+        src/lib/io/net_io.cpp
+        src/lib/types.cpp
+)
+
+add_executable(test_ot
+        src/include/mpc/protocols/ot/ot.h
+        test/ot/test_ot.cpp
+        src/include/crypto/sha2.h
+        src/lib/crypto/sha2.cpp
+        src/include/math/group.h
+        src/include/math/bigint.h
+        src/include/types.h
+        src/lib/types.cpp
+        src/lib/io/net_io.cpp
+
+)
