@@ -8,7 +8,9 @@
 namespace qst::mpc::protocols {
     template<typename IO_T>
     /**
-    * @brief Naor Pinkas OT class.
+    * @brief Naor Pinkas OT class
+    *
+    * @note Link to the paper: https://dl.acm.org/doi/10.5555/365411.365502
     */
     class NPOT final : public OT<IO_T> {
     public:

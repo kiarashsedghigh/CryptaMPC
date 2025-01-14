@@ -1,7 +1,7 @@
 /**
-* @mainpage My Project Documentation
+* @mainpage Quantum Safe Threshold (QST) Documentation
  *
- * Welcome to the official documentation for My Project!
+ * Welcome to the official documentation for Quantum Safe Threshold!
  *
  * This project is aimed at building a powerful library for network I/O operations.
  *

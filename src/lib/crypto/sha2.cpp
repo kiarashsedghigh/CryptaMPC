@@ -54,23 +54,4 @@ namespace qst::crypto::hash {
         EVP_DigestInit_ex(m_ctx, EVP_sha256(), NULL);
         m_size = 0;
     }
-
-// #ifdef __x86_64__
-//     __attribute__((target("sse2")))
-// #endif
-//     types::Data Sha2::hash_for_block(const void * data, int nbyte) {
-//         char digest[32];
-//         hash_once(digest, data, nbyte);
-//         return types::Data{_mm_load_si128((types::__m128i*)&digest[0])};
-//     }
-//
-//     types::Data Sha2::KDF(math::algstruct::Point &in, uint64_t id) {
-//         size_t len = in.size();
-//         in.group->resize_scratch(len + 8);
-//         unsigned char * tmp = in.group->scratch;
-//         in.to_bin(tmp, len);
-//         memcpy(tmp + len, &id, 8);
-//         return types::Data {hash_for_block(tmp, len + 8)};
-//     }
-
 }

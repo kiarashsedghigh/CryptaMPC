@@ -34,6 +34,8 @@ add_executable(fileio
         src/include/mpc/protocols/ot/npot.h
         src/include/math/bigint.h
         mainpage.cpp
+        src/include/mpc/protocols/ot/coot.h
+        src/include/mpc/protocols/ot/cot.h
 )
 
 add_executable(sha2
@@ -57,6 +59,9 @@ add_executable(ot
         src/lib/io/net_io.cpp
 
 )
+
+
+
 
 # Check if Doxygen is installed
 find_package(Doxygen REQUIRED)
@@ -90,9 +95,9 @@ add_executable(test_netio
         src/lib/types.cpp
 )
 
-add_executable(test_ot
+add_executable(test_npot
         src/include/mpc/protocols/ot/ot.h
-        test/ot/test_ot.cpp
+        test/mpc/ot/test_npot.cpp
         src/include/crypto/sha2.h
         src/lib/crypto/sha2.cpp
         src/include/math/group.h
@@ -100,5 +105,80 @@ add_executable(test_ot
         src/include/types.h
         src/lib/types.cpp
         src/lib/io/net_io.cpp
+
+)
+
+add_executable(test_coot
+        src/include/mpc/protocols/ot/ot.h
+        test/mpc/ot/test_coot.cpp
+        src/include/crypto/sha2.h
+        src/lib/crypto/sha2.cpp
+        src/include/math/group.h
+        src/include/math/bigint.h
+        src/include/types.h
+        src/lib/types.cpp
+        src/lib/io/net_io.cpp
+
+)
+
+add_executable(test_gc
+        src/include/mpc/protocols/gc/circuits/circuit.h
+        src/include/mpc/protocols/gc/circuits/bristol_circuit.h
+        src/lib/mpc/gc/circuits/bristol_circuit.cpp
+        test/mpc/gc/test_gc.cpp
+
+        #                src/include/crypto/sha2.h
+        #                src/lib/crypto/sha2.cpp
+        #                src/include/math/group.h
+        #                src/include/math/bigint.h
+#                        src/include/types.h
+#                        src/lib/types.cpp
+        #                src/lib/io/net_io.cpp
+
+)
+
+add_executable(test_2pc
+        src/include/mpc/protocols/gc/circuits/circuit.h
+        src/include/mpc/protocols/gc/circuits/bristol_circuit.h
+        src/lib/mpc/gc/circuits/bristol_circuit.cpp
+        test/mpc/gc/test_2pc.cpp
+        src/include/mpc/protocols/gc/2pc.h
+
+        #                src/include/crypto/sha2.h
+        #                src/lib/crypto/sha2.cpp
+        #                src/include/math/group.h
+        #                src/include/math/bigint.h
+        #                        src/include/types.h
+        #                        src/lib/types.cpp
+        #                src/lib/io/net_io.cpp
+
+)
+
+add_executable(test_abit
+        src/include/mpc/protocols/gc/abit.h
+        test/mpc/gc/test_abit.cpp
+
+        #                src/include/crypto/sha2.h
+        #                src/lib/crypto/sha2.cpp
+        #                src/include/math/group.h
+        #                src/include/math/bigint.h
+        #                        src/include/types.h
+        #                        src/lib/types.cpp
+        #                src/lib/io/net_io.cpp
+
+)
+
+add_executable(test_prng
+        src/include/crypto/prng.h
+        test/crypto/test_prng.cpp
+        src/lib/crypto/prng.cpp
+
+        #                src/include/crypto/sha2.h
+        #                src/lib/crypto/sha2.cpp
+        #                src/include/math/group.h
+        #                src/include/math/bigint.h
+        #                        src/include/types.h
+        #                        src/lib/types.cpp
+        #                src/lib/io/net_io.cpp
 
 )

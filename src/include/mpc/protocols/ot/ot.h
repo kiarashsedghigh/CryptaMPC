@@ -2,8 +2,6 @@
 #define OT_H
 
 #include <types.h>
-#include <openssl/evp.h>
-#include <cstdint>
 
 namespace qst::mpc::protocols {
     template<typename IO_T>

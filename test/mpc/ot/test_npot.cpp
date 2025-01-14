@@ -3,14 +3,12 @@
 #include "math/group.h"
 #include "mpc/protocols/ot/npot.h"
 
-constexpr int data_size{16};
-
 void npot_one_n_server(const char *address, const int port, qst::math::algstruct::Group *group) {
     /* Create NetIO with the address and port */
     const qst::io::NetIO server{address, port, true};
 
     /* Create NPOT object */
-    qst::mpc::protocols::NPOT<qst::io::NetIO> npot{server, group, data_size};
+    qst::mpc::protocols::NPOT<qst::io::NetIO> npot{server, group, 16};
 
     /* Generate 4 data samples (tuples): [('a','A'), ('b','B'), ('c','C'), ('d','D')] */
     const auto lower_case_letters = new qst::types::Data[4]{
@@ -51,9 +49,8 @@ void npot_one_n_client(const char *address, const int port, qst::math::algstruct
 
     /* Recv */
     npot.recv_n(letters, choices, 4);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
         letters[i].print_string();
-    }
 }
 
 
@@ -66,7 +63,6 @@ void npot_one_two_server(const char *address, const int port, qst::math::algstru
 
     /* Generate 2 data samples */
     qst::types::Data data1{"aaaaaaaaaaaaaaaa", 16}, data2{"bbbbbbbbbbbbbbbb", 16};
-
 
     /* Send */
     npot.send(data1, data2);
@@ -108,11 +104,11 @@ int main() {
 
     /* Test N-N OT */
     /* Crate two threads */
-    std::thread server_thread_1n(npot_one_n_server, server_listen_address, server_listen_port, nullptr);
-    std::thread client_thread_1n(npot_one_n_client, client_dest_address, client_dest_port, nullptr);
+    std::thread server_thread_nn(npot_one_n_server, server_listen_address, server_listen_port, nullptr);
+    std::thread client_thread_nn(npot_one_n_client, client_dest_address, client_dest_port, nullptr);
 
-    server_thread_1n.join();
-    client_thread_1n.join();
+    server_thread_nn.join();
+    client_thread_nn.join();
 
     return 0;
 }

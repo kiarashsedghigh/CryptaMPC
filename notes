@@ -1,0 +1,5 @@
+Point send -> Compressed 64 bytes
+commpress 32 bytes
+
+
+net io communnication should be buffered!!
