@@ -21,14 +21,12 @@
 #include <climits>
 #include <memory>
 
-
-
-
+#include "crypto/prng.h"
 
 using block = __m128i;
 
 namespace qst::crypto::prng {
-    class PrngAes {
+    class PrngAes : public Prng {
     public:
         explicit PrngAes(const void *seed = nullptr, int id = 0);
         void reseed(const block *seed, uint64_t id = 0);
