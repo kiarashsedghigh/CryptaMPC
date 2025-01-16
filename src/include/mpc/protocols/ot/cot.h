@@ -4,6 +4,7 @@
 #include "mpc/protocols/ot/ot.h"
 #include "utils/mitccrh.h"
 #include "utils/prg.h"
+#include "crypto/prng_aes.h"
 
 namespace emp {
 
@@ -13,7 +14,7 @@ class COT : public qst::mpc::protocols::OT<T>{ public:
 	T * io = nullptr;
 	emp::MITCCRH<ot_bsize> mitccrh;
 	block Delta;
-	emp::PRG prg;
+	qst::crypto::prng::PrngAes prg;
 	virtual void send_cot(block* data0, int64_t length) = 0;
 	virtual void recv_cot(block* data, const bool* b, int64_t length) = 0;
 

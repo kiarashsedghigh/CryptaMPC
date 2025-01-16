@@ -32,7 +32,7 @@ class IKNP: public COT<T> { public:
 	const static int64_t block_size = 1024*2;
 	block local_out[block_size];
 	bool s[128], local_r[256];
-	PRG prg, G0[128], G1[128];
+	qst::crypto::prng::PrngAes prg, G0[128], G1[128];
 	bool malicious = false;
 	block k0[128], k1[128];
 	IKNP(T * io, bool malicious = false): malicious(malicious) {
@@ -182,7 +182,7 @@ class IKNP: public COT<T> { public:
 		// io->recv_block(&seed2, 1);
 		io->read(&seed2, sizeof(block) * 1);
 		io->flush();
-		PRG chiPRG(&seed2);
+		qst::crypto::prng::PrngAes chiPRG(&seed2);
 
 		for(int64_t i = 0; i < length/block_size; ++i) {
 			chiPRG.random_block(chi, block_size);
@@ -226,7 +226,7 @@ class IKNP: public COT<T> { public:
 		io->flush();
 		block chi[block_size];
 		t[0] = t[1] = makeBlock(0, 0);
-		PRG chiPRG(&seed2);
+		qst::crypto::prng::PrngAes chiPRG(&seed2);
 
 		for(int64_t i = 0; i < length/block_size; ++i) {
 			chiPRG.random_block(chi, block_size);
