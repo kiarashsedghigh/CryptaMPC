@@ -5,6 +5,8 @@
 #include "math/group.h"
 #include "math/bigint.h"
 
+using block = __m128i;
+
 namespace qst::mpc::protocols {
     template<typename IO_T>
     /**
@@ -121,7 +123,7 @@ namespace qst::mpc::protocols {
          * @param arr_data2 List of second element of the tuples
          * @param count Number of tuples
          */
-        void send_n(const types::Data *arr_data1, const types::Data *arr_data2, int count) override {
+        void send_n(const types::Data *arr_data1, const types::Data *arr_data2, std::int64_t count) override {
             math::numbers::BigInt a;
             math::algstruct::Point A, AaInv;
             auto *B = new math::algstruct::Point[count];
@@ -163,7 +165,7 @@ namespace qst::mpc::protocols {
          * @param choices List of choice bits
          * @param count Number of tuples
          */
-        void recv_n(types::Data *arr_data, const bool *choices, const int count) override {
+        void recv_n(types::Data *arr_data, const bool *choices, const std::int64_t count) override {
             auto *bb = new math::numbers::BigInt [count];
             auto *B = new math::algstruct::Point[count],
                     *As = new math::algstruct::Point[count];
@@ -202,6 +204,99 @@ namespace qst::mpc::protocols {
                     arr_data[i] = arr_data[i] ^ masked_data[0];
             }
         }
+
+
+
+
+
+
+
+        // todo to remove !
+        void send_nn(const block* data0, const block* data1, int64_t length) {
+            qst::math::numbers::BigInt a;
+            qst::math::algstruct::Point A, AaInv;
+            block res[2];
+            auto * B = new math::algstruct::Point[length];
+            auto * BA = new math::algstruct::Point[length];
+
+            m_group->get_rand_bn(a);
+            A = m_group->mul_gen(a);
+            // io->send_pt(&A);
+            send_pt(m_io, &A);
+
+            AaInv = A.mul(a);
+            AaInv = AaInv.inv();
+
+            for(int64_t i = 0; i < length; ++i) {
+                recv_pt(m_io, m_group, &B[i]);
+                B[i] = B[i].mul(a);
+                BA[i] = B[i].add(AaInv);
+            }
+            m_io->flush();
+
+            for(int64_t i = 0; i < length; ++i) {
+                res[0] = math::algstruct::hash_point_to_data(B[i], i).as_m128i() ^ data0[i];
+                res[1] = math::algstruct::hash_point_to_data(BA[i], i).as_m128i() ^ data1[i];
+                m_io->write(res, 2*sizeof(block));
+            }
+
+            delete[] BA;
+            delete[] B;
+        }
+
+        void recv_nn(block* data, const bool* b, int64_t length) {
+            auto * bb = new math::numbers::BigInt[length];
+            auto * B = new math::algstruct::Point[length],
+                    * As = new math::algstruct::Point[length];
+            math::algstruct::Point A;
+
+            for(int64_t i = 0; i < length; ++i)
+                m_group->get_rand_bn(bb[i]);
+
+            // m_io->recv_pt(m_group, &A);
+            recv_pt(m_io,m_group, &A );
+
+            for(int64_t i = 0; i < length; ++i) {
+                B[i] = m_group->mul_gen(bb[i]);
+                if (b[i])
+                    B[i] = B[i].add(A);
+                // io->send_pt(&B[i]);
+                send_pt(m_io, &B[i]);
+            }
+            m_io->flush();
+
+            for(int64_t i = 0; i < length; ++i)
+                As[i] = A.mul(bb[i]);
+
+            block res[2];
+            for(int64_t i = 0; i < length; ++i) {
+                m_io->read(res, 2*sizeof(block));
+                data[i] = math::algstruct::hash_point_to_data(As[i], i).as_m128i();
+                if(b[i])
+                    data[i] = data[i] ^ res[1];
+                else
+                    data[i] = data[i] ^ res[0];
+            }
+
+            delete[] bb;
+            delete[] B;
+            delete[] As;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private:
         /**

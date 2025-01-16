@@ -7,6 +7,10 @@
 #include <vector>
 
 namespace qst::types {
+
+    typedef long long __m128i __attribute__ ((__vector_size__ (16), __may_alias__));
+    using block = __m128i;
+
     /**
      * @brief Compact data type for 16 byte number. This type in EMP-Toolkit is called block.
      */
@@ -68,6 +72,9 @@ namespace qst::types {
          * @return New Data object containing the XOR of the two inputs
          */
         Data operator^(const Data &other) const;
+
+
+        __m128i as_m128i() const;
 
     private:
         std::vector<std::int8_t> m_bytes{};

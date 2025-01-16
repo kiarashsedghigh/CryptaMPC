@@ -25,7 +25,7 @@ namespace qst::mpc::protocols {
          * @param arr_data2 List of second element of tuples
          * @param count Number of data tuples
          */
-        virtual void send_n(const types::Data* arr_data1, const types::Data* arr_data2, int count) = 0;
+        virtual void send_n(const types::Data* arr_data1, const types::Data* arr_data2, std::int64_t count) = 0;
 
         /**
          * Receiver retrieves the data indexed by the choice bit
@@ -33,7 +33,6 @@ namespace qst::mpc::protocols {
          * @return Retrieved Data
          */
         virtual types::Data recv(bool choice) = 0;
-
 
         /**
          * Receiver retrieves multiple data from list of data tuples ([(data11, data12), (data21,data22) ,,,])
@@ -43,7 +42,7 @@ namespace qst::mpc::protocols {
          * @param count Number of choices
          * @return Retrieved Data
          */
-        virtual void recv_n(types::Data* arr_data, const bool* choices,  int count) = 0;
+        virtual void recv_n(types::Data* arr_data, const bool* choices,  std::int64_t count) = 0;
 
     };
 }

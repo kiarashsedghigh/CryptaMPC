@@ -55,9 +55,10 @@ namespace qst::types {
     }
 
     void Data::print_as_hex() const {
-        for (const auto byte: m_bytes)
-            std::cout << std::setw(2) << static_cast<int>(byte);
-        std::cout << std::endl;
+        for (const auto byte : m_bytes) {
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<unsigned int>(byte) << " ";
+        }
+        std::cout << std::endl; // End with a newline
     }
 
     void Data::print_string() const {
@@ -77,5 +78,9 @@ namespace qst::types {
             result.m_bytes.push_back(m_bytes[i] ^ other.m_bytes[i]);
 
         return result;
+    }
+
+    __m128i Data::as_m128i() const {
+        return *reinterpret_cast<const __m128i*>(m_bytes.data());
     }
 }

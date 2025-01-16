@@ -6,10 +6,6 @@
 #include "hash.h"
 #include <openssl/evp.h>
 
-// const static int HASH_BUFFER_SIZE = 1024*8; //todo check access
-
-#define HASH_BUFFER_SIZE 1024*8
-
 namespace qst::crypto::hash {
     class Sha2 : public Hash {
     public:

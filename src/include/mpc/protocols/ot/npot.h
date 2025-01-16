@@ -130,7 +130,7 @@ namespace qst::mpc::protocols {
          * @param arr_data2 List of second element of the tuples
          * @param count Number of tuples
          */
-        void send_n(const types::Data *arr_data1, const types::Data *arr_data2, int count) override {
+        void send_n(const types::Data *arr_data1, const types::Data *arr_data2, std::int64_t count) override {
             math::numbers::BigInt d;
             m_group->get_rand_bn(d);
             math::algstruct::Point C = m_group->mul_gen(d);
@@ -193,7 +193,7 @@ namespace qst::mpc::protocols {
          * @param choices List of choice bits
          * @param count Number of tuples
          */
-        void recv_n(types::Data *arr_data, const bool *choices, const int count) override {
+        void recv_n(types::Data *arr_data, const bool *choices, const std::int64_t count) override {
             auto *k = new math::numbers::BigInt[count];
             auto *gr = new math::algstruct::Point[count];
             math::algstruct::Point pk[2];

@@ -30,7 +30,7 @@ using block = __m128i;
 namespace qst::crypto::prng {
     class PrngAes {
     public:
-        PrngAes(const void *seed = nullptr, int id = 0);
+        explicit PrngAes(const void *seed = nullptr, int id = 0);
         void reseed(const block *seed, uint64_t id = 0);
         void random_data(void *data, int nbytes);
         void random_bool(bool *data, int length);

@@ -1,3 +1,6 @@
+using std::chrono::time_point;
+using std::chrono::high_resolution_clock;
+
 template<class... Ts>
 void run_function(void *function, const Ts&... args) {	
 	reinterpret_cast<void(*)(Ts...)>(function)(args...);
@@ -77,7 +80,7 @@ inline void from_bool(const bool * data, T * output, const int len, const bool r
 
 
 inline block bool_to_block(const bool * data) {
-	return makeBlock(bool_to_int<uint64_t>(data+64), bool_to_int<uint64_t>(data));
+	return emp::makeBlock(bool_to_int<uint64_t>(data+64), bool_to_int<uint64_t>(data));
 }
 
 inline void  block_to_bool(bool * data, block b) {
