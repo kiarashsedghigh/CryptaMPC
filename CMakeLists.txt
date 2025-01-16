@@ -81,12 +81,17 @@ set(SOURCES_PRNG
 ############ Test Targets
 ####################################
 
+# Set the output directory for test executables
+set(TEST_OUTPUT_DIR ${CMAKE_BINARY_DIR}/bin/test)
+
+# Create test executables and set the output directory
 add_executable(test_netio
         ${HEADERS_NETIO}
         test/io/test_netio.cpp
         ${SOURCES_NETIO}
         ${SOURCES_FILEIO}
 )
+set_target_properties(test_netio PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_npot
         ${HEADERS_OT}
@@ -96,6 +101,7 @@ add_executable(test_npot
         ${SOURCES_FILEIO}
         ${SOURCES_NETIO}
 )
+set_target_properties(test_npot PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_coot
         ${HEADERS_OT}
@@ -105,6 +111,7 @@ add_executable(test_coot
         ${SOURCES_FILEIO}
         ${SOURCES_NETIO}
 )
+set_target_properties(test_coot PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_cot
         ${HEADERS_OT}
@@ -116,26 +123,55 @@ add_executable(test_cot
         ${SOURCES_PRNG}
         ${HEADERS_UTILS}
 )
+set_target_properties(test_cot PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_gc
         ${HEADERS_TEST}
         test/mpc/gc/test_gc.cpp
         ${SOURCES_TEST}
 )
+set_target_properties(test_gc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_2pc
         ${HEADERS_TEST}
         test/mpc/gc/test_2pc.cpp
         ${SOURCES_TEST}
 )
+set_target_properties(test_2pc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_abit
         ${HEADERS_TEST}
         test/mpc/gc/test_abit.cpp
 )
+set_target_properties(test_abit PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_prng
         ${HEADERS_SHA2}
         test/crypto/test_prng.cpp
         ${SOURCES_PRNG}
 )
+set_target_properties(test_prng PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+
+####################################
+############ Doxygen Documentation
+####################################
+
+# Check if Doxygen is available
+find_package(Doxygen REQUIRED)
+
+# Define the Doxygen configuration file path
+set(DOXYGEN_CONFIG_FILE ${CMAKE_SOURCE_DIR}/Doxyfile)
+
+# Modify the Doxygen output directory to be the 'doc' folder
+set(DOXYGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/doc)
+
+# Add target for generating the documentation
+add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIG_FILE}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+)
+
+# Ensure the output directory exists
+file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
+
