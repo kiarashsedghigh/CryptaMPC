@@ -1,8 +1,4 @@
-# QuantumSafeThreshold
-
-# Project Name
-
-This project is built using CMake and supports multiple build targets to streamline the development process. Below is a guide on how to configure, build, and run the project, along with a list of available build targets.
+# Quantum Safe Threshold (QST)
 
 ## Prerequisites
 
@@ -50,8 +46,6 @@ To build the tests, use the following command:
 ```bash
 cmake --build . --target <test_target>
 ```
-
-
 
 # Generate Documentation
 
