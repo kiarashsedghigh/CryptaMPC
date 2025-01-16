@@ -1,5 +1,5 @@
 #include "types.h"
-
+#include <cstring>
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
@@ -7,80 +7,80 @@
 
 namespace qst::types {
     Data::Data(const __m128i &data) {
-        const auto *ptr = reinterpret_cast<const std::int8_t *>(&data);
-        for (size_t i = 0; i < 16; ++i)
-            m_bytes.push_back(ptr[i]);
+        m_bytes.assign(reinterpret_cast<const std::uint8_t *>(&data),
+                       reinterpret_cast<const std::uint8_t *>(&data) + 16);
     }
 
-    Data::Data(const int8_t *input, const std::size_t len) {
-        for (size_t i = 0; i < len; ++i)
-            m_bytes.push_back(input[i]);
+    Data::Data(Data &&other) noexcept
+        : m_bytes(std::move(other.m_bytes)) {
     }
 
-    Data::Data(const std::string &input) {
-        for (const auto &c: input)
-            m_bytes.push_back(c);
+    Data::Data(const char *input) {
+        const std::size_t length{strlen(input)};
+        m_bytes.resize(length);
+        std::memcpy(m_bytes.data(), input, length);
     }
 
     Data::Data(const char *input, const std::size_t len) {
-        for (int i = 0; i < len; ++i)
-            m_bytes.push_back(input[i]);
+        m_bytes.resize(len);
+        std::memcpy(m_bytes.data(), input, len);
     }
 
-    std::uint64_t Data::get_size() const {
+    std::size_t Data::get_size() const {
         return m_bytes.size();
     }
 
-    void Data::to_bytes(void *dest) {
-        auto *byte_dest = static_cast<std::int8_t *>(dest);
-        for (const auto byte: m_bytes)
-            *byte_dest++ = byte;
+    void Data::to_bytes(void *dest) const {
+        std::memcpy(dest, m_bytes.data(), m_bytes.size());
     }
 
     void Data::to_hex(void *dest) const {
-        int i{};
-        for (const auto byte: m_bytes) {
-            sprintf(static_cast<char *>(dest) + i * 2, "%02x", static_cast<unsigned char>(byte));
-            i++;
+        char *dest_ptr = static_cast<char *>(dest);
+        for (std::size_t i = 0; i < m_bytes.size(); ++i) {
+            std::sprintf(dest_ptr + i * 2, "%02x", static_cast<unsigned int>(m_bytes[i]));
         }
     }
 
     std::string Data::as_hex_string() const {
         std::ostringstream hex_stream;
-
+        hex_stream.fill('0');
+        hex_stream << std::hex;
         for (const auto byte: m_bytes) {
-            hex_stream << std::setw(2) << static_cast<int>(byte);
+            hex_stream << std::setw(2) << static_cast<unsigned int>(byte);
         }
         return hex_stream.str();
     }
 
+    std::string Data::as_string() const {
+        return {m_bytes.begin(), m_bytes.end()};
+    }
+
     void Data::print_as_hex() const {
-        for (const auto byte : m_bytes) {
-            std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<unsigned int>(byte) << " ";
-        }
-        std::cout << std::endl; // End with a newline
+        for (const auto byte: m_bytes)
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<unsigned int>(byte);
     }
 
     void Data::print_string() const {
         for (const auto byte: m_bytes)
             std::cout << byte;
-        std::cout << std::endl;
     }
 
     Data Data::operator^(const Data &other) const {
         if (m_bytes.size() != other.m_bytes.size())
             throw std::runtime_error("[TYPES]: Data::operator^: Size mismatch");
-        Data result;
 
+
+        Data result{};
         const std::size_t num_of_bytes{m_bytes.size()};
+        result.m_bytes.resize(num_of_bytes);
 
         for (std::size_t i = 0; i < num_of_bytes; ++i)
-            result.m_bytes.push_back(m_bytes[i] ^ other.m_bytes[i]);
+            result.m_bytes[i] = m_bytes[i] ^ other.m_bytes[i];
 
         return result;
     }
 
     __m128i Data::as_m128i() const {
-        return *reinterpret_cast<const __m128i*>(m_bytes.data());
+        return *reinterpret_cast<const __m128i *>(m_bytes.data());
     }
 }

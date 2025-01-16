@@ -31,7 +31,7 @@ set(HEADERS_FILEIO
 )
 
 set(HEADERS_SHA2
-        src/include/crypto/sha2.h
+        src/include/crypto/hash_sha2_256.h
         src/include/math/group.h
 )
 
@@ -62,7 +62,7 @@ set(SOURCES_FILEIO
 )
 
 set(SOURCES_SHA2
-        src/lib/crypto/sha2.cpp
+        src/lib/crypto/hash_sha2_256.cpp
 )
 
 set(SOURCES_OT

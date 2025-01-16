@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 #include <emmintrin.h>
-#include "crypto/sha2.h"
+#include "crypto/hash_sha2_256.h"
 
 
 namespace qst::math::algstruct {
@@ -79,7 +79,7 @@ namespace qst::math::algstruct {
     #endif
     inline types::Data hash_for_block(const void * data, int nbyte) {
         char digest[32];
-        crypto::hash::Sha2::hash_once(digest, data, nbyte);
+        crypto::hash::Sha2_256::hash_once(digest, data, nbyte);
         return types::Data{_mm_load_si128((types::__m128i*)&digest[0])};
     }
 

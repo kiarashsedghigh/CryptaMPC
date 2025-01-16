@@ -3,11 +3,9 @@
 
 #include <cstdint>
 #include <iostream>
-#include <ostream>
 #include <vector>
 
 namespace qst::types {
-
     typedef long long __m128i __attribute__ ((__vector_size__ (16), __may_alias__));
     using block = __m128i;
 
@@ -23,26 +21,25 @@ namespace qst::types {
     public:
         Data() = default;
 
+        explicit Data(const char *input);
+
+        explicit Data(const char *input, std::size_t len);
+
         explicit Data(const __m128i &data);
 
-        Data(const std::int8_t *input, std::size_t len);
-
-        explicit Data(const std::string &input);
-
-        Data(const char *input, std::size_t len);
-
+        Data(Data &&other) noexcept;
 
         /**
          * @brief Returns number of bytes of the current data
          * @return Number of bytes of the current data
          */
-        std::uint64_t get_size() const;
+        [[nodiscard]] std::size_t get_size() const;
 
         /**
          * @brief Writes (serialize) the byte of the current data to destination
          * @param dest Pointer to the destination to which we write the bytes
          */
-        void to_bytes(void *dest);
+        void to_bytes(void *dest) const;
 
         /**
          * @brief Writes the hex string representation of the bytes into the buffer
@@ -54,7 +51,15 @@ namespace qst::types {
          * @brief Returns the hex string representation of the bytes as a string object
          * @return Hex string representation of the bytes as a string object
          */
-        std::string as_hex_string() const;
+        [[nodiscard]] std::string as_hex_string() const;
+
+
+        /**
+         * @brief Returns the string representation of the bytes as a string object
+         * @return String representation of the bytes as a string object
+         */
+        [[nodiscard]] std::string as_string() const;
+
 
         /**
          * @brief Prints the bytes as hex string
@@ -74,10 +79,14 @@ namespace qst::types {
         Data operator^(const Data &other) const;
 
 
-        __m128i as_m128i() const;
+        /**
+         * @brief Return the internal data as a single __m128i data type. Only the first 16 Bytes is returned
+         * @return __m128i data value of the current data
+         */
+        [[nodiscard]] __m128i as_m128i() const;
 
     private:
-        std::vector<std::int8_t> m_bytes{};
+        std::vector<std::uint8_t> m_bytes{};
     };
 }
 
