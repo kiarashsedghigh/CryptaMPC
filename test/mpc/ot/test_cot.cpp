@@ -36,10 +36,10 @@ void npot_one_n_client(const char *address, const int port, qst::math::algstruct
 
     /* List of choices */
     const auto choices = new bool[4];
-    choices[0] = true;
-    choices[1] = false;
+    choices[0] = false;
+    choices[1] = true;
     choices[2] = false;
-    choices[3] = true;
+    choices[3] = false;
 
 
     /* List of letters retrieved from the OT */
