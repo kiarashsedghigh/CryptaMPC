@@ -29,6 +29,8 @@ namespace qst::types {
 
         Data(Data &&other) noexcept;
 
+        Data& operator=(const Data&) = default; //todo this has a note
+
         /**
          * @brief Returns number of bytes of the current data
          * @return Number of bytes of the current data
