@@ -15,15 +15,30 @@ namespace qst::types {
         : m_bytes(std::move(other.m_bytes)) {
     }
 
-    Data::Data(const char *input) {
-        const std::size_t length{strlen(input)};
-        m_bytes.resize(length);
-        std::memcpy(m_bytes.data(), input, length);
-    }
+    // Data::Data(const char *input, const std::size_t len) {
+    //     m_bytes.resize(len);
+    //     std::memcpy(m_bytes.data(), input, len);
+    // }
 
-    Data::Data(const char *input, const std::size_t len) {
-        m_bytes.resize(len);
-        std::memcpy(m_bytes.data(), input, len);
+    Data::Data(const char *input, const std::size_t input_length,  const DataInputType type){
+        if (type == DataInputType::HEX_STRING) {
+            const std::string hex_str {input};
+
+            if (input_length % 2 != 0)
+                throw std::invalid_argument("HEX string must have an even length.");
+
+            m_bytes.reserve(input_length / 2);
+
+            for (size_t i = 0; i < input_length; i += 2) {
+                unsigned int byte {};
+                if (sscanf(hex_str.c_str() + i, "%2x", &byte) != 1)
+                    throw std::invalid_argument("Invalid HEX string.");
+                m_bytes.push_back(static_cast<std::uint8_t>(byte));
+            }
+        }else {
+            m_bytes.resize(input_length);
+            std::memcpy(m_bytes.data(), input, input_length);
+        }
     }
 
     std::size_t Data::get_size() const {
@@ -32,6 +47,15 @@ namespace qst::types {
 
     void Data::to_bytes(void *dest) const {
         std::memcpy(dest, m_bytes.data(), m_bytes.size());
+    }
+
+
+    void Data::to_bool_array(bool * output) const {
+        const std::size_t size {m_bytes.size()};
+        for (size_t i = 0; i < size; ++i) {
+            for (size_t j = 0; j < 8; ++j)
+                output[i * 8 + j] = ((m_bytes[i] >> (7 - j)) & 1);
+        }
     }
 
     void Data::to_hex(void *dest) const {
@@ -68,7 +92,6 @@ namespace qst::types {
     Data Data::operator^(const Data &other) const {
         if (m_bytes.size() != other.m_bytes.size())
             throw std::runtime_error("[TYPES]: Data::operator^: Size mismatch");
-
 
         Data result{};
         const std::size_t num_of_bytes{m_bytes.size()};

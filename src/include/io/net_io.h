@@ -57,7 +57,7 @@ namespace qst::io {
          */
         void flush() const;
 
-    private:
+    // private: //todo
         std::int32_t m_port{};
         std::string m_ip{};
         bool m_is_server{};

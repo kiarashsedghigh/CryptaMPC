@@ -19,11 +19,17 @@ namespace qst::types {
      */
     class Data {
     public:
+
+        enum class DataInputType {
+            PLAIN_BYTE,
+            HEX_STRING,
+        };
+
         Data() = default;
 
-        explicit Data(const char *input);
+        // explicit Data(const char *input, std::size_t len);
 
-        explicit Data(const char *input, std::size_t len);
+        explicit Data(const char *input, std::size_t input_length, DataInputType type = DataInputType::PLAIN_BYTE);
 
         explicit Data(const __m128i &data);
 
@@ -48,6 +54,13 @@ namespace qst::types {
          * @param dest Pointer to the destination buffer to which we want to write the string
          */
         void to_hex(void *dest) const;
+
+
+        /**
+         * @brief Converts the internal byte array to bool array
+         * @param output Pointer to the bool array
+         */
+        void to_bool_array(bool * output) const;
 
         /**
          * @brief Returns the hex string representation of the bytes as a string object

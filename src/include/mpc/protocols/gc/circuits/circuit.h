@@ -5,19 +5,21 @@
 
 namespace qst::mpc::protocols::gc {
     /**
+     * @brief Enum for gates of a circuit
+     */
+    enum CircuitGate {
+        AND_GATE,
+        XOR_GATE,
+        NOT_GATE,
+    };
+
+    /**
      * @brief Implementing base class for representing binary circuits
      */
     class Circuit {
     public:
         virtual ~Circuit() = default;
 
-        virtual void evaluate() = 0;
-
-        static constexpr int AND_GATE{0};
-        static constexpr int XOR_GATE{1};
-        static constexpr int NOT_GATE{2};
-
-    protected:
         /**
          * @brief Total number of gates in the circuit
          */
