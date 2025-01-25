@@ -71,6 +71,7 @@ set(SOURCES_OT
 
 set(SOURCES_TEST
         src/lib/mpc/gc/circuits/bristol_circuit.cpp
+        backup_2pc.h
 )
 
 set(SOURCES_PRNG
@@ -125,25 +126,32 @@ add_executable(test_cot
 )
 set_target_properties(test_cot PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
-add_executable(test_gc
-        ${HEADERS_TEST}
-        test/mpc/gc/test_gc.cpp
-        ${SOURCES_TEST}
+
+
+file(GLOB_RECURSE SOURCES_LIB "src/lib/*.cpp")
+
+
+add_executable(test_types
+        ./src/include/types.h
+        ./src/lib/types.cpp
+        test/test_types.cpp
 )
-set_target_properties(test_gc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+set_target_properties(test_types PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+
+
 
 add_executable(test_2pc
         ${HEADERS_TEST}
-        test/mpc/gc/test_2pc.cpp
-        ${SOURCES_TEST}
+        ${SOURCES_LIB}
+        src/include/mpc/protocols/gc/preprocessing.h
+        src/include/mpc/protocols/gc/leaky_deltaot.h
+        src/include/mpc/protocols/gc/helper.h
+        src/include/mpc/protocols/gc/feq.h
+
+        test/mpc/test_2pc.cpp
 )
 set_target_properties(test_2pc PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
-add_executable(test_abit
-        ${HEADERS_TEST}
-        test/mpc/gc/test_abit.cpp
-)
-set_target_properties(test_abit PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 
 add_executable(test_prng
         ${HEADERS_SHA2}
