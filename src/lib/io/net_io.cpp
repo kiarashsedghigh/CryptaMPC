@@ -62,7 +62,7 @@ namespace qst::io {
         m_stream = fdopen(m_connection_socket, "wb+");
         m_buffer = new char[NETWORK_BUFFER_SIZE];
         memset(m_buffer, 0, NETWORK_BUFFER_SIZE);
-        setvbuf(m_stream, m_buffer, _IONBF, NETWORK_BUFFER_SIZE); //todo
+        setvbuf(m_stream, m_buffer, _IOFBF, NETWORK_BUFFER_SIZE); //todo
     }
 
     NetIO::~NetIO() {
