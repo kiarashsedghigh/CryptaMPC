@@ -71,7 +71,7 @@ set(SOURCES_OT
 
 set(SOURCES_TEST
         src/lib/mpc/gc/circuits/bristol_circuit.cpp
-        backup_2pc.h
+        Misc/backup_2pc.h
 )
 
 set(SOURCES_PRNG
